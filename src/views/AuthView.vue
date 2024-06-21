@@ -6,9 +6,9 @@
       <input type="text" v-model="username" placeholder="Username" required>
       <input type="email" v-model="email" v-if="!isLoginMode" placeholder="Email" required>
       <input type="password" v-model="password" placeholder="Password" required>
-      <button type="submit">{{ isLoginMode ? 'Login' : 'Register' }}</button>
+      <button type="submit" class="btn btn-primary">{{ isLoginMode ? 'Login' : 'Register' }}</button>
     </form>
-    <button @click="toggleMode">{{ isLoginMode ? 'Switch to Register' : 'Switch to Login' }}</button>
+    <button @click="toggleMode" class="btn btn-success">{{ isLoginMode ? 'Switch to Sign Up' : 'Switch to Log In' }}</button>
   </div>
 </template>
 
@@ -17,6 +17,7 @@ import axios from 'axios'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'AuthView',
@@ -29,7 +30,7 @@ export default {
     const password = ref('')
 
     const toggleMode = () => {
-      isLoginMode.value = !isLoginMode.value;
+      isLoginMode.value = !isLoginMode.value
       username.value = ''
       email.value = ''
       password.value = ''
@@ -40,19 +41,19 @@ export default {
         const response = await axios.post('http://127.0.0.1:8000/api/token/', {
           username: username.value,
           password: password.value
-        });
-        const { access, refresh } = response.data;
-        localStorage.setItem('access_token', access);
-        localStorage.setItem('refresh_token', refresh);
+        })
+        const { access, refresh } = response.data
+        localStorage.setItem('access_token', access)
+        localStorage.setItem('refresh_token', refresh)
 
         // Set user state
-        store.dispatch('login', { username: username.value });
+        store.dispatch('login', { username: username.value })
 
-        alert('Login successful');
-        router.push('/');
+        Swal.fire('Login successful', '', 'success')
+        router.push('/')
       } catch (error) {
-        console.error('Login error:', error.response ? error.response.data : error.message);
-        alert('An error occurred during login.');
+        console.error('Login error:', error.response ? error.response.data : error.message)
+        Swal.fire('An error occurred during login', '', 'error')
       }
     }
 
@@ -62,22 +63,22 @@ export default {
           username: username.value,
           email: email.value,
           password: password.value
-        });
-        console.log('Register response:', response.data);
-        alert('User registered successfully');
-        toggleMode();  // 自動切換到登入模式
+        })
+        console.log('Register response:', response.data)
+        Swal.fire('User registered successfully', '', 'success')
+        toggleMode()  // 自動切換到登入模式
       } catch (error) {
-        console.error('Registration error:', error.response ? error.response.data : error.message);
+        console.error('Registration error:', error.response ? error.response.data : error.message)
         if (error.response && error.response.data) {
           if (error.response.data.username) {
-            alert(`An error occurred during registration: ${error.response.data.username}`);
+            Swal.fire('An error occurred during registration', error.response.data.username, 'error')
           } else if (error.response.data.email) {
-            alert(`An error occurred during registration: ${error.response.data.email}`);
+            Swal.fire('An error occurred during registration', error.response.data.email, 'error')
           } else {
-            alert(`An error occurred during registration: ${JSON.stringify(error.response.data)}`);
+            Swal.fire('An error occurred during registration', JSON.stringify(error.response.data), 'error')
           }
         } else {
-          alert('An error occurred during registration.');
+          Swal.fire('An error occurred during registration', '', 'error')
         }
       }
     }
