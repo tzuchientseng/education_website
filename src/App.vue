@@ -1,11 +1,20 @@
 <template>
-   <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/auth">Authentication</router-link> |
-    </nav>
-  <router-view/>
+  <div id="app">
+    <AppNavbar />
+    <router-view/>
+  </div>
 </template>
+
+<script>
+import AppNavbar from './components/AppNavbar.vue'
+
+export default {
+  name: 'App',
+  components: {
+    AppNavbar
+  }
+}
+</script>
 
 <style>
 #app {
@@ -29,3 +38,4 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
+

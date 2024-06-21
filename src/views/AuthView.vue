@@ -14,56 +14,83 @@
 
 <script>
 import axios from 'axios'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 export default {
   name: 'AuthView',
-  data() {
-    return {
-      isLoginMode: true,
-      username: '',
-      email: '',
-      password: ''
+  setup() {
+    const store = useStore()
+    const router = useRouter()
+    const isLoginMode = ref(true)
+    const username = ref('')
+    const email = ref('')
+    const password = ref('')
+
+    const toggleMode = () => {
+      isLoginMode.value = !isLoginMode.value;
+      username.value = ''
+      email.value = ''
+      password.value = ''
     }
-  },
-  methods: {
-    toggleMode() {
-      this.isLoginMode = !this.isLoginMode;
-      this.username = '';
-      this.email = '';
-      this.password = '';
-    },
-    async login() {
+
+    const login = async () => {
       try {
         const response = await axios.post('http://127.0.0.1:8000/api/token/', {
-          username: this.username,
-          password: this.password
+          username: username.value,
+          password: password.value
         });
         const { access, refresh } = response.data;
         localStorage.setItem('access_token', access);
         localStorage.setItem('refresh_token', refresh);
+
+        // Set user state
+        store.dispatch('login', { username: username.value });
+
         alert('Login successful');
-        this.$router.push('/');
+        router.push('/');
       } catch (error) {
         console.error('Login error:', error.response ? error.response.data : error.message);
         alert('An error occurred during login.');
       }
-    },
-    async register() {
+    }
+
+    const register = async () => {
       try {
         const response = await axios.post('http://127.0.0.1:8000/api/auth/register/', {
-          username: this.username,
-          email: this.email,
-          password: this.password
+          username: username.value,
+          email: email.value,
+          password: password.value
         });
         console.log('Register response:', response.data);
         alert('User registered successfully');
-        this.toggleMode();  // 自動切換到登入模式
+        toggleMode();  // 自動切換到登入模式
       } catch (error) {
         console.error('Registration error:', error.response ? error.response.data : error.message);
-        alert('An error occurred during registration.');
+        if (error.response && error.response.data) {
+          if (error.response.data.username) {
+            alert(`An error occurred during registration: ${error.response.data.username}`);
+          } else if (error.response.data.email) {
+            alert(`An error occurred during registration: ${error.response.data.email}`);
+          } else {
+            alert(`An error occurred during registration: ${JSON.stringify(error.response.data)}`);
+          }
+        } else {
+          alert('An error occurred during registration.');
+        }
       }
     }
 
+    return {
+      isLoginMode,
+      username,
+      email,
+      password,
+      toggleMode,
+      login,
+      register
+    }
   }
 }
 </script>
