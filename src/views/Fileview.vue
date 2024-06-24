@@ -1,54 +1,38 @@
 <template>
-  <div>
-    <!-- 這裡是關於頁面的內容 -->
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'AboutView'
-}
-</script>
-
-<style scoped>
-/* 這裡是你的樣式 */
-</style>
-
-<!-- <template>
-<section>
-  <h1>This is an about page</h1>
-  <div class="container">
-    <div
-        @dragover.prevent
-        @dragenter.prevent="handleDragEnter"
-        @dragleave.prevent="handleDragLeave"
-        @drop.prevent="handleDrop"
-        :class="{'dragover': isDragOver}"
-        class="drag-drop-area"
-        >
-        <p>Drag files here to upload</p>
+  <section>
+    <h1>Login to upload files</h1>
+    <div class="container">
+      <div
+          @dragover.prevent
+          @dragenter.prevent="handleDragEnter"
+          @dragleave.prevent="handleDragLeave"
+          @drop.prevent="handleDrop"
+          :class="{'dragover': isDragOver}"
+          class="drag-drop-area"
+          >
+          <p>Drag files here to upload</p>
+      </div>
     </div>
-  </div>
-  <div class="pt-2 pb-2">
-    <label>Upload File:</label>
-    <input type="file" @change="handleFileChange" />
-  </div>
-</section>
-    <button @click="uploadFile" class="btn btn-primary">Upload</button>
-<br>
-<hr>
-<br>
-<section>
-  <div>
-    <h2>Uploaded Files</h2>
-    <ul>
-      <li v-for="file in uploadedFiles" :key="file">
-        <a :href="file" target="_blank">{{ file }}</a>
-        <button @click="deleteFile(file)" class="btn btn-danger btn-sm">Delete</button>
-      </li>
-    </ul>
-  </div>
-</section>
+    <div class="pt-2 pb-2">
+      <label>Upload File:</label>
+      <input type="file" @change="handleFileChange" />
+    </div>
+  </section>
+  <button @click="uploadFile" class="btn btn-primary">Upload</button>
+  <br>
+  <hr>
+  <br>
+  <section>
+    <div>
+      <h2>Uploaded Files</h2>
+      <ul>
+        <li v-for="file in uploadedFiles" :key="file">
+          <a :href="file" target="_blank">{{ file }}</a>
+          <button @click="deleteFile(file)" class="btn btn-danger btn-sm">Delete</button>
+        </li>
+      </ul>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -56,6 +40,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 
 export default {
+  name: 'FileViewComponent',
   data() {
     return {
       selectedFile: null,
@@ -160,4 +145,5 @@ export default {
   margin: 0;
   font-size: 16px;
 }
-</style> -->
+</style>
+

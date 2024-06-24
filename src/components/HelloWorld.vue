@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>
@@ -38,6 +38,49 @@ export default {
     msg: String
   }
 }
+</script> -->
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- <style scoped>
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+</style> -->
+
+<template>
+  <div class="hello">
+    <h1>{{ msg }}</h1>
+    <p>
+      This is the education wibsite project<br>
+      check out my Website:  
+      <a href="https://tzuchientseng.github.io/sunny.github.io/" target="_blank" rel="noopener">Sunny Tseng</a>.
+    </p>
+    <h3>github</h3>
+    <ul>
+      <li><a href="https://github.com/tzuchientseng/Java" target="_blank" rel="noopener">JAVA</a></li>
+      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-routerhttps://github.com/tzuchientseng/python" target="_blank" rel="noopener">PYTHON</a></li>
+    </ul>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'HelloWorld',
+  props: {
+    msg: String
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -54,6 +97,7 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  color: #da7e28;
 }
 </style>
+

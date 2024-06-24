@@ -2,6 +2,7 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> |
+    <router-link to="/file">File</router-link> |
     <router-link to="/auth">Authentication</router-link> |
     <!-- <span v-if="isAuthenticated"> | Welcome, {{ user.username }} | <button @click="logout" class="btn btn-outline-secondary btn-sm">Log Out</button></span> -->
     <span v-if="isAuthenticated"> | Welcome, {{ user.username }} | <button @click="logout" class="btn btn-warning">Log Out</button></span>
