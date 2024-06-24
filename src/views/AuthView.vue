@@ -19,6 +19,11 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import Swal from 'sweetalert2'
 
+const axiosInstance = axios.create({
+  baseURL: 'http://127.0.0.1:8000',
+  timeout: 10000,
+})
+
 export default {
   name: 'AuthView',
   setup() {
@@ -38,7 +43,7 @@ export default {
 
     const login = async () => {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/token/', {
+        const response = await axiosInstance.post('/api/token/', {
           username: username.value,
           password: password.value
         })
@@ -53,13 +58,21 @@ export default {
         router.push('/')
       } catch (error) {
         console.error('Login error:', error.response ? error.response.data : error.message)
-        Swal.fire('An error occurred during login', '', 'error')
+        if (error.response && error.response.data) {
+          Swal.fire({
+            icon: 'error',
+            title: 'An error occurred during login',
+            text: error.response.data.detail || 'Unknown error',
+          })
+        } else {
+          Swal.fire('An error occurred during login', error.message, 'error')
+        }
       }
     }
 
     const register = async () => {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/auth/register/', {
+        const response = await axiosInstance.post('/api/auth/register/', {
           username: username.value,
           email: email.value,
           password: password.value
@@ -70,15 +83,22 @@ export default {
       } catch (error) {
         console.error('Registration error:', error.response ? error.response.data : error.message)
         if (error.response && error.response.data) {
-          if (error.response.data.username) {
-            Swal.fire('An error occurred during registration', error.response.data.username, 'error')
-          } else if (error.response.data.email) {
-            Swal.fire('An error occurred during registration', error.response.data.email, 'error')
+          const errors = error.response.data
+          let errorMessage = ''
+          if (errors.username) {
+            errorMessage = errors.username.join(' ')
+          } else if (errors.email) {
+            errorMessage = errors.email.join(' ')
           } else {
-            Swal.fire('An error occurred during registration', JSON.stringify(error.response.data), 'error')
+            errorMessage = JSON.stringify(errors)
           }
+          Swal.fire({
+            icon: 'error',
+            title: 'An error occurred during registration',
+            text: errorMessage,
+          })
         } else {
-          Swal.fire('An error occurred during registration', '', 'error')
+          Swal.fire('An error occurred during registration', error.message, 'error')
         }
       }
     }
